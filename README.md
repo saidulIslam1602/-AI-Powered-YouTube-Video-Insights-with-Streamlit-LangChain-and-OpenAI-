@@ -1,7 +1,3 @@
-Sure! Here's a suitable GitHub description for your project:
-
----
-
 # AI-Powered YouTube Video Insights with Streamlit, LangChain, and OpenAI
 
 This project is a Streamlit-based web application that leverages LangChain and OpenAI's GPT models to extract and analyze insights from YouTube video transcripts. Users can input a YouTube video URL along with a query, and the application will generate a detailed response based on the video's content. The application uses FAISS for efficient similarity search across transcript chunks, making it easy to find the most relevant information in response to user queries.
@@ -22,4 +18,3 @@ This project is a Streamlit-based web application that leverages LangChain and O
 
 ---
 
-This description should give potential contributors and users a clear understanding of the project's purpose and functionality.
