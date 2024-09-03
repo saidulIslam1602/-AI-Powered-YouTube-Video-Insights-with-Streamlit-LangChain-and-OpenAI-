@@ -1,0 +1,2 @@
+# -AI-Powered-YouTube-Video-Insights-with-Streamlit-LangChain-and-OpenAI-
+This project is a Streamlit app that uses LangChain and OpenAI GPT models to extract insights from YouTube video transcripts. Input a video URL and query to get detailed responses based on the transcript. Features include automatic language detection, FAISS for efficient text search, and a user-friendly interface for seamless interaction.
