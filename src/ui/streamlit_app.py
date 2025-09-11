@@ -32,155 +32,319 @@ st.set_page_config(
 
 # Custom CSS for professional styling
 def load_custom_css():
-    """Load custom CSS for enhanced UI."""
+    """Load Microsoft-style minimal CSS for professional UI."""
     st.markdown("""
     <style>
-    /* Main theme colors */
+    /* Microsoft Design System Colors */
     :root {
-        --primary-color: #1f77b4;
-        --secondary-color: #ff7f0e;
-        --success-color: #2ca02c;
-        --warning-color: #ff7f0e;
-        --error-color: #d62728;
-        --background-color: #f8f9fa;
-        --text-color: #212529;
+        --ms-blue: #0078d4;
+        --ms-blue-hover: #106ebe;
+        --ms-blue-light: #deecf9;
+        --ms-gray-50: #faf9f8;
+        --ms-gray-100: #f3f2f1;
+        --ms-gray-200: #edebe9;
+        --ms-gray-300: #e1dfdd;
+        --ms-gray-400: #c8c6c4;
+        --ms-gray-500: #8a8886;
+        --ms-gray-600: #605e5c;
+        --ms-gray-700: #484644;
+        --ms-gray-800: #323130;
+        --ms-gray-900: #201f1e;
+        --ms-green: #107c10;
+        --ms-orange: #d83b01;
+        --ms-red: #d13438;
+        --ms-purple: #5c2d91;
+        --ms-teal: #00bcf2;
+        --white: #ffffff;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        --border-radius: 4px;
+        --border-radius-lg: 8px;
     }
     
-    /* Header styling */
+    /* Global Styles */
+    .stApp {
+        background-color: var(--ms-gray-50);
+        font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
+    }
+    
+    /* Main Container */
+    .main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px;
+        background: var(--white);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-sm);
+    }
+    
+    /* Microsoft Header */
     .main-header {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        padding: 2rem;
-        border-radius: 10px;
-        margin-bottom: 2rem;
-        color: white;
-        text-align: center;
+        background: var(--white);
+        border-bottom: 1px solid var(--ms-gray-200);
+        padding: 24px 0;
+        margin-bottom: 32px;
+        text-align: left;
     }
     
     .main-header h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--ms-gray-900);
         margin: 0;
-        font-size: 2.5rem;
-        font-weight: 700;
+        line-height: 1.2;
     }
     
     .main-header p {
-        margin: 0.5rem 0 0 0;
-        font-size: 1.1rem;
-        opacity: 0.9;
+        font-size: 1rem;
+        color: var(--ms-gray-600);
+        margin: 8px 0 0 0;
+        font-weight: 400;
     }
     
-    /* Card styling */
-    .info-card {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin: 1rem 0;
-        border-left: 4px solid var(--primary-color);
+    /* Microsoft Cards */
+    .ms-card {
+        background: var(--white);
+        border: 1px solid var(--ms-gray-200);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-sm);
     }
     
-    .metric-card {
-        background: white;
-        padding: 1rem;
-        border-radius: 8px;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    /* Button styling */
-    .stButton > button {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 0.75rem 2rem;
+    .ms-card-header {
+        font-size: 1.125rem;
         font-weight: 600;
-        transition: all 0.3s ease;
-        width: 100%;
+        color: var(--ms-gray-900);
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--ms-gray-200);
+    }
+    
+    /* Sidebar Styling */
+    .sidebar-section {
+        background: var(--white);
+        border: 1px solid var(--ms-gray-200);
+        border-radius: var(--border-radius);
+        padding: 16px;
+        margin-bottom: 12px;
+    }
+    
+    .sidebar-section h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--ms-gray-900);
+        margin: 0 0 12px 0;
+    }
+    
+    /* Microsoft Buttons */
+    .stButton > button {
+        background: var(--ms-blue);
+        color: var(--white);
+        border: none;
+        border-radius: var(--border-radius);
+        padding: 8px 16px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-height: 32px;
     }
     
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        background: var(--ms-blue-hover);
+        box-shadow: var(--shadow-sm);
     }
     
-    /* Input styling */
-    .stTextInput > div > div > input {
-        border: 2px solid #e9ecef;
-        border-radius: 8px;
-        padding: 0.75rem;
-        transition: border-color 0.3s ease;
+    .stButton > button:active {
+        background: var(--ms-blue-hover);
+        transform: translateY(1px);
     }
     
-    .stTextInput > div > div > input:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(31, 119, 180, 0.1);
+    /* Primary Button */
+    .stButton > button[kind="primary"] {
+        background: var(--ms-blue);
     }
     
-    /* Success/Error styling */
-    .success-message {
-        background-color: #d4edda;
-        border: 1px solid #c3e6cb;
-        color: #155724;
-        padding: 1rem;
-        border-radius: 8px;
-        margin: 1rem 0;
+    .stButton > button[kind="primary"]:hover {
+        background: var(--ms-blue-hover);
     }
     
-    .error-message {
-        background-color: #f8d7da;
-        border: 1px solid #f5c6cb;
-        color: #721c24;
-        padding: 1rem;
-        border-radius: 8px;
-        margin: 1rem 0;
+    /* Secondary Button */
+    .stButton > button[kind="secondary"] {
+        background: var(--white);
+        color: var(--ms-gray-700);
+        border: 1px solid var(--ms-gray-300);
     }
     
-    /* Sidebar styling */
-    .sidebar-section {
-        background: white;
-        padding: 1rem;
-        border-radius: 8px;
-        margin: 1rem 0;
-        border: 1px solid #e9ecef;
+    .stButton > button[kind="secondary"]:hover {
+        background: var(--ms-gray-50);
+        border-color: var(--ms-gray-400);
     }
     
-    /* Response styling */
+    /* Input Fields */
+    .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea,
+    .stSelectbox > div > div > select {
+        border: 1px solid var(--ms-gray-300);
+        border-radius: var(--border-radius);
+        padding: 8px 12px;
+        font-size: 0.875rem;
+        font-family: inherit;
+        background: var(--white);
+        color: var(--ms-gray-900);
+    }
+    
+    .stTextInput > div > div > input:focus,
+    .stTextArea > div > div > textarea:focus,
+    .stSelectbox > div > div > select:focus {
+        border-color: var(--ms-blue);
+        box-shadow: 0 0 0 2px var(--ms-blue-light);
+        outline: none;
+    }
+    
+    /* Response Container */
     .response-container {
-        background: white;
-        padding: 2rem;
-        border-radius: 10px;
-        border: 1px solid #e9ecef;
-        margin: 1rem 0;
+        background: var(--white);
+        border: 1px solid var(--ms-gray-200);
+        border-radius: var(--border-radius);
+        padding: 20px;
+        margin: 16px 0;
+        box-shadow: var(--shadow-sm);
     }
     
+    /* Confidence Badges */
     .confidence-badge {
         display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.875rem;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
         font-weight: 600;
-        margin: 0.5rem 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     .confidence-high {
-        background-color: #d4edda;
-        color: #155724;
+        background: #dff6dd;
+        color: #107c10;
     }
     
     .confidence-medium {
-        background-color: #fff3cd;
-        color: #856404;
+        background: #fff4ce;
+        color: #d83b01;
     }
     
     .confidence-low {
-        background-color: #f8d7da;
-        color: #721c24;
+        background: #fde7e9;
+        color: #d13438;
     }
     
-    /* Hide Streamlit elements */
-    #MainMenu {visibility: hidden;}
+    /* Metrics */
+    .metric-card {
+        background: var(--white);
+        border: 1px solid var(--ms-gray-200);
+        border-radius: var(--border-radius);
+        padding: 16px;
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .metric-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--ms-gray-900);
+        margin: 0;
+    }
+    
+    .metric-label {
+        font-size: 0.75rem;
+        color: var(--ms-gray-600);
+        margin: 4px 0 0 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background: var(--ms-gray-100);
+        padding: 4px;
+        border-radius: var(--border-radius);
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background: transparent;
+        border-radius: var(--border-radius);
+        padding: 8px 16px;
+        font-weight: 500;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: var(--white);
+        color: var(--ms-blue);
+        box-shadow: var(--shadow-sm);
+    }
+    
+    /* Progress Bar */
+    .stProgress > div > div > div > div {
+        background: var(--ms-blue);
+    }
+    
+    /* Alerts */
+    .stAlert {
+        border-radius: var(--border-radius);
+        border: none;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .stSuccess {
+        background: #dff6dd;
+        color: #107c10;
+        border-left: 4px solid var(--ms-green);
+    }
+    
+    .stError {
+        background: #fde7e9;
+        color: #d13438;
+        border-left: 4px solid var(--ms-red);
+    }
+    
+    .stWarning {
+        background: #fff4ce;
+        color: #d83b01;
+        border-left: 4px solid var(--ms-orange);
+    }
+    
+    .stInfo {
+        background: var(--ms-blue-light);
+        color: var(--ms-blue);
+        border-left: 4px solid var(--ms-blue);
+    }
+    
+    /* Hide Streamlit branding */
     footer {visibility: hidden;}
     header {visibility: hidden;}
+    .stDeployButton {display: none;}
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: var(--ms-gray-100);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--ms-gray-400);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--ms-gray-500);
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -235,11 +399,11 @@ def initialize_session_state():
         st.session_state.session_timeout = 24 * 60 * 60  # 24 hours in seconds
 
 def render_header():
-    """Render the main application header."""
+    """Render the main application header with Microsoft style."""
     st.markdown(f"""
     <div class="main-header">
         <h1>{settings.page_icon} {settings.app_name}</h1>
-        <p>AI-Powered YouTube Video Analysis with Advanced Language Processing</p>
+        <p>Enterprise-grade AI video analysis with Microsoft Azure integration</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -612,15 +776,15 @@ def main():
             st.exception(e)
 
 def render_authentication_page():
-    """Render authentication page."""
+    """Render authentication page with Microsoft design."""
     st.markdown("""
     <div class="main-header">
         <h1>🎥 Video Insights Platform</h1>
-        <p>AI-Powered YouTube Video Analysis for Enterprise Clients</p>
+        <p>Enterprise AI video analysis powered by Microsoft Azure</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Demo account info
+    # Demo account info with Microsoft styling
     st.info("""
     **Demo Account Available:**
     - Email: demo@company.com
@@ -629,7 +793,7 @@ def render_authentication_page():
     """)
     
     # Authentication tabs
-    tab1, tab2 = st.tabs(["🔐 Sign In", "📝 Create Account"])
+    tab1, tab2 = st.tabs(["Sign In", "Create Account"])
     
     with tab1:
         render_signin_form()
@@ -638,7 +802,7 @@ def render_authentication_page():
         render_signup_form()
 
 def render_signin_form():
-    """Render sign-in form."""
+    """Render sign-in form with Microsoft styling."""
     st.markdown("### Sign In to Your Account")
     
     # Use regular inputs instead of form
@@ -649,7 +813,7 @@ def render_signin_form():
     with col1:
         signin_button = st.button("Sign In", type="primary", key="signin_btn")
     with col2:
-        if st.button("Forgot Password?", key="forgot_btn"):
+        if st.button("Forgot Password?", key="forgot_btn", type="secondary"):
             st.info("Password reset feature coming soon!")
     
     if signin_button:
@@ -672,10 +836,12 @@ def render_signin_form():
             st.error("Please fill in all fields.")
 
 def render_signup_form():
-    """Render sign-up form."""
+    """Render sign-up form with Microsoft styling."""
     st.markdown("### Create Your Account")
     
     # Use regular inputs instead of form
+    company_name = st.text_input("Company Name", placeholder="Your Company Inc.", key="signup_company")
+    contact_name = st.text_input("Contact Name", placeholder="John Doe", key="signup_name")
     contact_email = st.text_input("Email Address", placeholder="john@company.com", key="signup_email")
     password = st.text_input("Password", type="password", key="signup_password")
     confirm_password = st.text_input("Confirm Password", type="password", key="signup_confirm")
@@ -699,9 +865,9 @@ def render_signup_form():
             st.error("Please fill in all fields.")
 
 def render_main_interface():
-    """Render the main application interface."""
+    """Render the main application interface with Microsoft styling."""
     # Navigation
-    tab1, tab2, tab3 = st.tabs(["🎥 Video Analysis", "📊 Dashboard", "⚙️ Settings"])
+    tab1, tab2, tab3 = st.tabs(["Video Analysis", "Dashboard", "Settings"])
     
     with tab1:
         render_video_analysis_tab()
@@ -713,7 +879,7 @@ def render_main_interface():
         render_settings_tab()
 
 def render_video_analysis_tab():
-    """Render the video analysis tab."""
+    """Render the video analysis tab with Microsoft styling."""
     # Render header
     render_header()
     
@@ -742,7 +908,7 @@ def render_video_analysis_tab():
     )
 
 def render_client_dashboard_tab():
-    """Render the client dashboard tab."""
+    """Render the client dashboard tab with Microsoft styling."""
     if st.session_state.client:
         st.session_state.client_dashboard.render_dashboard(st.session_state.client)
     else:
@@ -750,7 +916,7 @@ def render_client_dashboard_tab():
 
 def render_settings_tab():
     """Render the settings tab with Microsoft standards."""
-    st.markdown("# ⚙️ Settings & Performance")
+    st.markdown("# Settings & Performance")
     
     if st.session_state.client:
         st.markdown(f"**Logged in as:** {st.session_state.client.contact_name} ({st.session_state.client.company_name})")
