@@ -170,7 +170,6 @@ src/
 - **YouTube Transcript API** for transcript access
 
 
-**Built with ❤️ by [Your Name](https://github.com/yourusername)**
 
 *Transform any YouTube video into actionable insights with the power of AI!*
 
