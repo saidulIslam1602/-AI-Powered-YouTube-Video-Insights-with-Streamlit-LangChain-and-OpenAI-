@@ -65,4 +65,15 @@ passlib[bcrypt]>=1.7.4
 fastapi>=0.104.0
 uvicorn[standard]>=0.24.0
 pydantic[email]>=2.5.0
-httpx>=0.25.0 
+httpx>=0.25.0
+
+# Microsoft Azure Integration
+msal>=1.24.0
+azure-identity>=1.15.0
+azure-keyvault-secrets>=4.7.0
+azure-storage-blob>=12.19.0
+
+# Performance & Security
+cryptography>=41.0.0
+pyjwt>=2.8.0
+psutil>=5.9.0 

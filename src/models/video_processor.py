@@ -95,22 +95,24 @@ class VideoProcessor:
     def fetch_transcript(self, video_id: str) -> Tuple[str, str]:
         """Fetch video transcript and detect language."""
         try:
-            transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+            # Create API instance and get available transcripts
+            api = YouTubeTranscriptApi()
+            transcript_list = api.list(video_id)
             logger.info(f"Available transcript languages: {[t.language_code for t in transcript_list]}")
             
             # Try to get English transcript first
             try:
                 transcript = transcript_list.find_transcript(['en', 'en-US', 'en-GB'])
-                language = 'en'
+                transcript_entries = transcript.fetch()
+                language = transcript.language_code
             except NoTranscriptFound:
                 # Get any available transcript
                 try:
                     transcript = next(iter(transcript_list))
+                    transcript_entries = transcript.fetch()
                     language = transcript.language_code
                 except (StopIteration, AttributeError):
                     raise TranscriptError(f"No transcripts available for video {video_id}")
-            
-            transcript_entries = transcript.fetch()
             
             # Handle both old and new transcript API formats
             transcript_text = ""
