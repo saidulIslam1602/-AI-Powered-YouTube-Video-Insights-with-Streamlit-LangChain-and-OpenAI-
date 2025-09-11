@@ -76,4 +76,7 @@ azure-storage-blob>=12.19.0
 # Performance & Security
 cryptography>=41.0.0
 pyjwt>=2.8.0
-psutil>=5.9.0 
+psutil>=5.9.0
+
+# Microsoft SQL Server
+pyodbc>=5.0.0 

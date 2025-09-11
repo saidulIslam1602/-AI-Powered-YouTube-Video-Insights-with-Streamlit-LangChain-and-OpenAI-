@@ -18,6 +18,7 @@ from src.utils.exceptions import (
 from src.models.video_processor import VideoProcessor, ProcessedVideo
 from src.models.query_engine import QueryEngine, QueryResult
 from src.models.client_manager import ClientManager, Client
+from src.models.sql_client_manager import SQLClientManager, SQLClient
 from src.ui.client_dashboard import ClientDashboard
 from src.auth.azure_auth import EnhancedAuthManager
 from src.utils.performance import performance_optimizer, response_optimizer
@@ -370,7 +371,7 @@ def initialize_session_state():
         st.session_state.auth_manager = EnhancedAuthManager()
     
     if 'client_manager' not in st.session_state:
-        st.session_state.client_manager = ClientManager()
+        st.session_state.client_manager = SQLClientManager()
     
     if 'client_dashboard' not in st.session_state:
         st.session_state.client_dashboard = ClientDashboard(st.session_state.client_manager)
