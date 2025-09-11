@@ -2,6 +2,9 @@
 
 import streamlit as st
 import time
+import plotly.express as px
+import plotly.graph_objects as go
+import pandas as pd
 from typing import Optional
 from datetime import datetime
 
@@ -13,6 +16,8 @@ from src.utils.exceptions import (
 )
 from src.models.video_processor import VideoProcessor, ProcessedVideo
 from src.models.query_engine import QueryEngine, QueryResult
+from src.models.client_manager import ClientManager, Client
+from src.ui.client_dashboard import ClientDashboard
 
 # Page configuration
 st.set_page_config(
@@ -192,6 +197,22 @@ def initialize_session_state():
     
     if 'current_video_url' not in st.session_state:
         st.session_state.current_video_url = ""
+    
+    # Customer-facing features
+    if 'client_manager' not in st.session_state:
+        st.session_state.client_manager = ClientManager()
+    
+    if 'client_dashboard' not in st.session_state:
+        st.session_state.client_dashboard = ClientDashboard(st.session_state.client_manager)
+    
+    if 'authenticated' not in st.session_state:
+        st.session_state.authenticated = False
+    
+    if 'client' not in st.session_state:
+        st.session_state.client = None
+    
+    if 'client_session_id' not in st.session_state:
+        st.session_state.client_session_id = None
 
 def render_header():
     """Render the main application header."""
@@ -205,6 +226,24 @@ def render_header():
 def render_sidebar():
     """Render the application sidebar."""
     with st.sidebar:
+        # Client information (if authenticated)
+        if st.session_state.authenticated and st.session_state.client:
+            st.markdown('<div class="sidebar-section">', unsafe_allow_html=True)
+            st.markdown("### 🏢 Client Information")
+            st.markdown(f"**Company:** {st.session_state.client.company_name}")
+            st.markdown(f"**User:** {st.session_state.client.contact_name}")
+            st.markdown(f"**Tier:** {st.session_state.client.subscription_tier.title()}")
+            st.markdown(f"**API Usage:** {st.session_state.client.api_usage}/{st.session_state.client.api_quota}")
+            
+            # Quota warning
+            usage_percentage = (st.session_state.client.api_usage / st.session_state.client.api_quota) * 100
+            if usage_percentage > 80:
+                st.warning("⚠️ Quota nearly exceeded")
+            elif usage_percentage > 100:
+                st.error("❌ Quota exceeded")
+            
+            st.markdown('</div>', unsafe_allow_html=True)
+        
         st.markdown("### 🛠️ Application Settings")
         
         # Cache management
@@ -388,13 +427,35 @@ def render_query_section():
 def process_query(query: str):
     """Process a user query and display results."""
     try:
+        start_time = time.time()
+        
         with st.spinner("🤔 Analyzing your question..."):
             result = st.session_state.query_engine.generate_response(
                 st.session_state.processed_video, query
             )
             
+            # Calculate response time
+            response_time = time.time() - start_time
+            
             # Add to history
             st.session_state.query_history.append((query, datetime.now()))
+            
+            # Track client analytics if authenticated
+            if st.session_state.authenticated and st.session_state.client:
+                try:
+                    st.session_state.client_manager.log_analytics(
+                        client_id=st.session_state.client.client_id,
+                        video_id=st.session_state.processed_video.video_info.video_id,
+                        query=query,
+                        response_time=response_time,
+                        confidence_score=result.confidence_score
+                    )
+                    
+                    # Update API usage
+                    st.session_state.client_manager.update_api_usage(st.session_state.client.client_id)
+                    
+                except Exception as e:
+                    logger.error(f"Failed to log analytics: {str(e)}")
             
             # Display result
             render_query_result(result)
@@ -457,6 +518,30 @@ def render_query_result(result: QueryResult):
             with st.expander(f"Chunk {i+1}"):
                 st.text(chunk[:500] + "..." if len(chunk) > 500 else chunk)
     
+    # Client feedback section (only for authenticated users)
+    if st.session_state.authenticated and st.session_state.client:
+        st.markdown("---")
+        st.markdown("### 💬 Rate This Response")
+        
+        col1, col2, col3 = st.columns([1, 2, 1])
+        
+        with col2:
+            feedback_rating = st.slider("How helpful was this response?", 1, 5, 5, 
+                                      help="1 = Not helpful, 5 = Very helpful")
+            
+            if st.button("Submit Feedback", key=f"feedback_{len(st.session_state.query_history)}"):
+                try:
+                    st.session_state.client_manager.submit_feedback(
+                        client_id=st.session_state.client.client_id,
+                        session_id=st.session_state.client_session_id,
+                        rating=feedback_rating,
+                        feedback_text=""
+                    )
+                    st.success("Thank you for your feedback! 🙏")
+                except Exception as e:
+                    logger.error(f"Failed to submit feedback: {str(e)}")
+                    st.error("Failed to submit feedback. Please try again.")
+    
     st.markdown('</div>', unsafe_allow_html=True)
 
 def main():
@@ -468,32 +553,24 @@ def main():
         # Initialize session state
         initialize_session_state()
         
-        # Render header
-        render_header()
+        # Check authentication
+        if not st.session_state.authenticated:
+            render_authentication_page()
+            return
         
-        # Render sidebar
-        render_sidebar()
+        # Validate client session
+        if st.session_state.client_session_id:
+            client = st.session_state.client_manager.validate_session(st.session_state.client_session_id)
+            if not client:
+                st.session_state.authenticated = False
+                st.session_state.client = None
+                st.session_state.client_session_id = None
+                st.rerun()
+            else:
+                st.session_state.client = client
         
-        # Main content
-        video_url, process_button, use_cache = render_video_input_section()
-        
-        # Process video if button clicked
-        if process_button and video_url:
-            render_video_processing(video_url, use_cache)
-        
-        # Query section
-        render_query_section()
-        
-        # Footer
-        st.markdown("---")
-        st.markdown(
-            "<div style='text-align: center; color: #666; font-size: 0.9rem;'>"
-            f"🚀 Powered by {settings.openai_model} | "
-            f"Version {settings.app_version} | "
-            "Built with ❤️ using Streamlit"
-            "</div>",
-            unsafe_allow_html=True
-        )
+        # Main application interface
+        render_main_interface()
         
     except Exception as e:
         st.error(f"❌ Application error: {str(e)}")
@@ -501,6 +578,164 @@ def main():
         
         if settings.debug:
             st.exception(e)
+
+def render_authentication_page():
+    """Render authentication page."""
+    st.markdown("""
+    <div class="main-header">
+        <h1>🎥 Video Insights Platform</h1>
+        <p>AI-Powered YouTube Video Analysis for Enterprise Clients</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Authentication tabs
+    tab1, tab2 = st.tabs(["🔐 Sign In", "📝 Create Account"])
+    
+    with tab1:
+        render_signin_form()
+    
+    with tab2:
+        render_signup_form()
+
+def render_signin_form():
+    """Render sign-in form."""
+    with st.form("signin_form"):
+        st.markdown("### Sign In to Your Account")
+        
+        email = st.text_input("Email Address", placeholder="your@company.com")
+        password = st.text_input("Password", type="password")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            signin_button = st.form_submit_button("Sign In", type="primary")
+        with col2:
+            if st.form_submit_button("Forgot Password?"):
+                st.info("Password reset feature coming soon!")
+        
+        if signin_button:
+            if email and password:
+                client = st.session_state.client_manager.authenticate_client(email, password)
+                if client:
+                    # Create session
+                    session_id = st.session_state.client_manager.create_session(client.client_id)
+                    st.session_state['client'] = client
+                    st.session_state['client_session_id'] = session_id
+                    st.session_state['authenticated'] = True
+                    st.success("Successfully signed in!")
+                    st.rerun()
+                else:
+                    st.error("Invalid email or password.")
+            else:
+                st.error("Please fill in all fields.")
+
+def render_signup_form():
+    """Render sign-up form."""
+    with st.form("signup_form"):
+        st.markdown("### Create Your Account")
+        
+        company_name = st.text_input("Company Name", placeholder="Your Company Inc.")
+        contact_name = st.text_input("Contact Name", placeholder="John Doe")
+        contact_email = st.text_input("Email Address", placeholder="john@company.com")
+        password = st.text_input("Password", type="password")
+        confirm_password = st.text_input("Confirm Password", type="password")
+        subscription_tier = st.selectbox("Subscription Tier", ["basic", "professional", "enterprise"])
+        
+        if st.form_submit_button("Create Account", type="primary"):
+            if all([company_name, contact_name, contact_email, password, confirm_password]):
+                if password == confirm_password:
+                    try:
+                        client_id = st.session_state.client_manager.create_client(
+                            company_name, contact_email, contact_name, password, subscription_tier
+                        )
+                        st.success("Account created successfully! Please sign in.")
+                    except ValueError as e:
+                        st.error(str(e))
+                else:
+                    st.error("Passwords do not match.")
+            else:
+                st.error("Please fill in all fields.")
+
+def render_main_interface():
+    """Render the main application interface."""
+    # Navigation
+    tab1, tab2, tab3 = st.tabs(["🎥 Video Analysis", "📊 Dashboard", "⚙️ Settings"])
+    
+    with tab1:
+        render_video_analysis_tab()
+    
+    with tab2:
+        render_client_dashboard_tab()
+    
+    with tab3:
+        render_settings_tab()
+
+def render_video_analysis_tab():
+    """Render the video analysis tab."""
+    # Render header
+    render_header()
+    
+    # Render sidebar
+    render_sidebar()
+    
+    # Main content
+    video_url, process_button, use_cache = render_video_input_section()
+    
+    # Process video if button clicked
+    if process_button and video_url:
+        render_video_processing(video_url, use_cache)
+    
+    # Query section
+    render_query_section()
+    
+    # Footer
+    st.markdown("---")
+    st.markdown(
+        "<div style='text-align: center; color: #666; font-size: 0.9rem;'>"
+        f"🚀 Powered by {settings.openai_model} | "
+        f"Version {settings.app_version} | "
+        "Built with ❤️ using Streamlit"
+        "</div>",
+        unsafe_allow_html=True
+    )
+
+def render_client_dashboard_tab():
+    """Render the client dashboard tab."""
+    if st.session_state.client:
+        st.session_state.client_dashboard.render_dashboard(st.session_state.client)
+    else:
+        st.error("Client information not available.")
+
+def render_settings_tab():
+    """Render the settings tab."""
+    st.markdown("# ⚙️ Settings")
+    
+    if st.session_state.client:
+        st.markdown(f"**Logged in as:** {st.session_state.client.contact_name} ({st.session_state.client.company_name})")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("### Account Information")
+            st.markdown(f"**Company:** {st.session_state.client.company_name}")
+            st.markdown(f"**Email:** {st.session_state.client.contact_email}")
+            st.markdown(f"**Subscription:** {st.session_state.client.subscription_tier.title()}")
+            st.markdown(f"**API Usage:** {st.session_state.client.api_usage}/{st.session_state.client.api_quota}")
+        
+        with col2:
+            st.markdown("### Quick Actions")
+            if st.button("📊 Generate Report"):
+                st.info("Report generation feature coming soon!")
+            
+            if st.button("🔄 Refresh Data"):
+                st.rerun()
+            
+            if st.button("🚪 Sign Out"):
+                st.session_state.authenticated = False
+                st.session_state.client = None
+                st.session_state.client_session_id = None
+                st.rerun()
+    else:
+        st.error("Please sign in to access settings.")
 
 if __name__ == "__main__":
     main() 

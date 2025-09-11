@@ -1,14 +1,16 @@
-# Multi-stage Dockerfile for YouTube Video Insights
+# Multi-stage Dockerfile for YouTube Video Insights - Enterprise Edition
 
 # Build stage
 FROM python:3.11-slim as builder
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies for building
 RUN apt-get update && apt-get install -y \
     build-essential \
     gcc \
+    g++ \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies
@@ -22,6 +24,8 @@ WORKDIR /app
 
 # Install system dependencies for runtime
 RUN apt-get update && apt-get install -y \
+    curl \
+    redis-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
@@ -44,9 +48,11 @@ ENV STREAMLIT_SERVER_PORT=8501
 ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
 ENV STREAMLIT_SERVER_HEADLESS=true
 ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+ENV REDIS_URL=redis://redis:6379/0
+ENV DATABASE_URL=sqlite:///data/clients.db
 
-# Create logs directory
-RUN mkdir -p /app/logs
+# Create necessary directories
+RUN mkdir -p /app/logs /app/data /app/cache
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \

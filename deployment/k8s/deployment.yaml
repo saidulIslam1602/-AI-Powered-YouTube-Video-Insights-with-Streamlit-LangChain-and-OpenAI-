@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: youtube-insights
+  labels:
+    app: youtube-insights
+    version: v1.0.0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: youtube-insights
+  template:
+    metadata:
+      labels:
+        app: youtube-insights
+        version: v1.0.0
+    spec:
+      containers:
+      - name: youtube-insights
+        image: youtube-insights:latest
+        ports:
+        - containerPort: 8501
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: youtube-insights-secrets
+              key: openai-api-key
+        - name: REDIS_URL
+          value: "redis://redis-service:6379/0"
+        - name: DATABASE_URL
+          value: "postgresql://postgres:password@postgres-service:5432/youtube_insights"
+        - name: SMTP_HOST
+          value: "smtp.gmail.com"
+        - name: SMTP_PORT
+          value: "587"
+        - name: SMTP_USER
+          valueFrom:
+            secretKeyRef:
+              name: youtube-insights-secrets
+              key: smtp-user
+        - name: SMTP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: youtube-insights-secrets
+              key: smtp-password
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /_stcore/health
+            port: 8501
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /_stcore/health
+            port: 8501
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: data-volume
+          mountPath: /app/data
+        - name: logs-volume
+          mountPath: /app/logs
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: youtube-insights-data-pvc
+      - name: logs-volume
+        persistentVolumeClaim:
+          claimName: youtube-insights-logs-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: youtube-insights-service
+  labels:
+    app: youtube-insights
+spec:
+  selector:
+    app: youtube-insights
+  ports:
+  - port: 80
+    targetPort: 8501
+    protocol: TCP
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: youtube-insights-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: youtube-insights-logs-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: youtube-insights-secrets
+type: Opaque
+data:
+  openai-api-key: <base64-encoded-key>
+  smtp-user: <base64-encoded-user>
+  smtp-password: <base64-encoded-password>

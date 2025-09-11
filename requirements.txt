@@ -41,4 +41,28 @@ mkdocs-material>=9.4.0
 
 # Development Tools
 pre-commit>=3.4.0
-jupyter>=1.0.0 
+jupyter>=1.0.0
+
+# Customer-Facing Features
+streamlit-authenticator>=0.2.3
+plotly>=5.17.0
+reportlab>=4.0.0
+python-multipart>=0.0.6
+bcrypt>=4.0.1
+cryptography>=41.0.0
+sqlalchemy>=2.0.0
+
+# Enterprise Features
+redis>=5.0.0
+celery>=5.3.0
+prometheus-client>=0.19.0
+psycopg2-binary>=2.9.0
+alembic>=1.12.0
+email-validator>=2.1.0
+jinja2>=3.1.0
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic[email]>=2.5.0
+httpx>=0.25.0 
