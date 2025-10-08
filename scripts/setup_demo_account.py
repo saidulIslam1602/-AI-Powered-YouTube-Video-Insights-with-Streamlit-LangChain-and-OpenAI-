@@ -12,7 +12,7 @@ from models.client_manager import ClientManager
 
 def setup_demo_account():
     """Create a demo account for testing."""
-    print("🔧 Setting up demo account...")
+    print("Setting up demo account...")
     
     try:
         # Initialize client manager
@@ -27,20 +27,20 @@ def setup_demo_account():
             subscription_tier="professional"
         )
         
-        print(f"✅ Demo account created successfully!")
-        print(f"📧 Email: demo@company.com")
-        print(f"🔑 Password: demo123")
-        print(f"🏢 Company: Demo Company")
-        print(f"👤 User: Demo User")
-        print(f"📊 Tier: Professional")
+        print(f"Demo account created successfully!")
+        print(f"Email: demo@company.com")
+        print(f"Password: demo123")
+        print(f"Company: Demo Company")
+        print(f"User: Demo User")
+        print(f"Tier: Professional")
         
     except ValueError as e:
         if "already exists" in str(e):
-            print("ℹ️  Demo account already exists!")
+            print("Demo account already exists!")
         else:
-            print(f"❌ Error: {e}")
+            print(f"Error: {e}")
     except Exception as e:
-        print(f"❌ Unexpected error: {e}")
+        print(f"Unexpected error: {e}")
 
 if __name__ == "__main__":
     setup_demo_account()

@@ -1,0 +1,310 @@
+/* Microsoft Design System Colors */
+:root {
+    --ms-blue: #0078d4;
+    --ms-blue-hover: #106ebe;
+    --ms-blue-light: #deecf9;
+    --ms-gray-50: #faf9f8;
+    --ms-gray-100: #f3f2f1;
+    --ms-gray-200: #edebe9;
+    --ms-gray-300: #e1dfdd;
+    --ms-gray-400: #c8c6c4;
+    --ms-gray-500: #8a8886;
+    --ms-gray-600: #605e5c;
+    --ms-gray-700: #484644;
+    --ms-gray-800: #323130;
+    --ms-gray-900: #201f1e;
+    --ms-green: #107c10;
+    --ms-orange: #d83b01;
+    --ms-red: #d13438;
+    --ms-purple: #5c2d91;
+    --ms-teal: #00bcf2;
+    --white: #ffffff;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --border-radius: 4px;
+    --border-radius-lg: 8px;
+}
+
+/* Global Styles */
+.stApp {
+    background-color: var(--ms-gray-50);
+    font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
+/* Main Container */
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Microsoft Header */
+.main-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--ms-gray-200);
+    padding: 24px 0;
+    margin-bottom: 32px;
+    text-align: left;
+}
+
+.main-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--ms-gray-900);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.main-header p {
+    font-size: 1rem;
+    color: var(--ms-gray-600);
+    margin: 8px 0 0 0;
+    font-weight: 400;
+}
+
+/* Microsoft Cards */
+.ms-card {
+    background: var(--white);
+    border: 1px solid var(--ms-gray-200);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.ms-card-header {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--ms-gray-900);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--ms-gray-200);
+}
+
+/* Sidebar Styling */
+.sidebar-section {
+    background: var(--white);
+    border: 1px solid var(--ms-gray-200);
+    border-radius: var(--border-radius);
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.sidebar-section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ms-gray-900);
+    margin: 0 0 12px 0;
+}
+
+/* Microsoft Buttons */
+.stButton > button {
+    background: var(--ms-blue);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 32px;
+}
+
+.stButton > button:hover {
+    background: var(--ms-blue-hover);
+    box-shadow: var(--shadow-sm);
+}
+
+.stButton > button:active {
+    background: var(--ms-blue-hover);
+    transform: translateY(1px);
+}
+
+/* Primary Button */
+.stButton > button[kind="primary"] {
+    background: var(--ms-blue);
+}
+
+.stButton > button[kind="primary"]:hover {
+    background: var(--ms-blue-hover);
+}
+
+/* Secondary Button */
+.stButton > button[kind="secondary"] {
+    background: var(--white);
+    color: var(--ms-gray-700);
+    border: 1px solid var(--ms-gray-300);
+}
+
+.stButton > button[kind="secondary"]:hover {
+    background: var(--ms-gray-50);
+    border-color: var(--ms-gray-400);
+}
+
+/* Input Fields */
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea,
+.stSelectbox > div > div > select {
+    border: 1px solid var(--ms-gray-300);
+    border-radius: var(--border-radius);
+    padding: 8px 12px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    background: var(--white);
+    color: var(--ms-gray-900);
+}
+
+.stTextInput > div > div > input:focus,
+.stTextArea > div > div > textarea:focus,
+.stSelectbox > div > div > select:focus {
+    border-color: var(--ms-blue);
+    box-shadow: 0 0 0 2px var(--ms-blue-light);
+    outline: none;
+}
+
+/* Response Container */
+.response-container {
+    background: var(--white);
+    border: 1px solid var(--ms-gray-200);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin: 16px 0;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Confidence Badges */
+.confidence-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.confidence-high {
+    background: #dff6dd;
+    color: #107c10;
+}
+
+.confidence-medium {
+    background: #fff4ce;
+    color: #d83b01;
+}
+
+.confidence-low {
+    background: #fde7e9;
+    color: #d13438;
+}
+
+/* Metrics */
+.metric-card {
+    background: var(--white);
+    border: 1px solid var(--ms-gray-200);
+    border-radius: var(--border-radius);
+    padding: 16px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ms-gray-900);
+    margin: 0;
+}
+
+.metric-label {
+    font-size: 0.75rem;
+    color: var(--ms-gray-600);
+    margin: 4px 0 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px;
+    background: var(--ms-gray-100);
+    padding: 4px;
+    border-radius: var(--border-radius);
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: transparent;
+    border-radius: var(--border-radius);
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+.stTabs [aria-selected="true"] {
+    background: var(--white);
+    color: var(--ms-blue);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Progress Bar */
+.stProgress > div > div > div > div {
+    background: var(--ms-blue);
+}
+
+/* Alerts */
+.stAlert {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.stSuccess {
+    background: #dff6dd;
+    color: #107c10;
+    border-left: 4px solid var(--ms-green);
+}
+
+.stError {
+    background: #fde7e9;
+    color: #d13438;
+    border-left: 4px solid var(--ms-red);
+}
+
+.stWarning {
+    background: #fff4ce;
+    color: #d83b01;
+    border-left: 4px solid var(--ms-orange);
+}
+
+.stInfo {
+    background: var(--ms-blue-light);
+    color: var(--ms-blue);
+    border-left: 4px solid var(--ms-blue);
+}
+
+/* Hide Streamlit branding */
+footer {visibility: hidden;}
+header {visibility: hidden;}
+.stDeployButton {display: none;}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--ms-gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--ms-gray-400);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--ms-gray-500);
+}

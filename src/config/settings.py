@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     
     # UI Configuration
     page_title: str = "YouTube Video Insights"
-    page_icon: str = "🎥"
+    page_icon: str = "TV"
     layout: str = "centered"
     
     # Database Configuration (optional)

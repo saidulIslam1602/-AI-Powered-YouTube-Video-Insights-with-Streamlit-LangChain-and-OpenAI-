@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to YouTube Video Insights! This document provides guidelines and information for contributors.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Python 3.8 or higher
@@ -42,7 +42,7 @@ Thank you for your interest in contributing to YouTube Video Insights! This docu
    make run
    ```
 
-## 📋 Development Workflow
+## Development Workflow
 
 ### Branch Strategy
 - `main`: Production-ready code
@@ -80,7 +80,7 @@ Thank you for your interest in contributing to YouTube Video Insights! This docu
    # Create a Pull Request on GitHub
    ```
 
-## 🎯 Coding Standards
+## Coding Standards
 
 ### Python Style Guide
 - Follow PEP 8
@@ -142,7 +142,7 @@ def process_video(url: str, use_cache: bool = True) -> ProcessedVideo:
     """
 ```
 
-## 🧪 Testing Guidelines
+## Testing Guidelines
 
 ### Test Structure
 - Unit tests: Test individual functions/methods
@@ -181,7 +181,7 @@ make test
 make test-fast
 ```
 
-## 📝 Commit Message Guidelines
+## Commit Message Guidelines
 
 We follow the Conventional Commits specification:
 
@@ -211,7 +211,7 @@ docs(readme): update installation instructions
 test(query-engine): add tests for language detection
 ```
 
-## 🔧 Architecture Guidelines
+## Architecture Guidelines
 
 ### Project Structure
 ```
@@ -260,7 +260,7 @@ except Exception as e:
     raise ProcessingError(f"Failed to process video: {e}")
 ```
 
-## 📚 Documentation
+## Documentation
 
 ### Code Documentation
 - Use docstrings for all public functions and classes
@@ -296,7 +296,7 @@ When reporting bugs, please include:
    - Log files
    - Configuration details
 
-## 💡 Feature Requests
+## Feature Requests
 
 When requesting features:
 
@@ -314,7 +314,7 @@ When requesting features:
    - Examples
    - Related issues
 
-## 🔒 Security
+## Security
 
 ### Reporting Security Issues
 - **DO NOT** open public issues for security vulnerabilities
@@ -328,7 +328,7 @@ When requesting features:
 - Validate all user inputs
 - Follow principle of least privilege
 
-## 📋 Pull Request Process
+## Pull Request Process
 
 ### Before Submitting
 - [ ] Tests pass locally
